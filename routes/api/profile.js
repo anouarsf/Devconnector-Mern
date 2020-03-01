@@ -82,10 +82,52 @@ res.json(profile);
   console.error(err.message);
   res.status(500).send('Server Error');
 }
-
-res.send('hello');
-
 }
 );
+
+// GET api/profile
+router.get('/', async (req,res) =>{
+  try {
+const profile = await Profile.find().populate('user', 'name');
+res.json(profile);
+  }catch (err) {
+    console.error(err.message) ;
+    res.status(500).send('Server Error');
+  }
+});
+
+// GET api/profile/user/user_id
+router.get('/user/:user_id', async (req,res) =>{
+  try {
+const profile = await Profile.findOne({ user: req.params.user_id }).populate('user', 'name');
+if(!profile) return res.status(400).json ({ msg: 'There is no profile for this user'}) ;
+
+res.json(profile);
+  }catch (err) {
+    console.error(err.message) ;
+if(err.kind == 'ObjectId'){
+  return res.status(400).json ({ msg: 'Profile not found'}) ;
+}
+
+
+
+    res.status(500).send('Server Error');
+  }
+});
+
+// DELETE api/profile
+router.delete('/', auth, async (req,res) =>{
+  try {
+    // Remove profile
+await Profile.findOneAndRemove({ user: req.user.id});
+    // Remove user
+    await User.findOneAndRemove({ _id: req.user.id});
+
+res.json({ msg : 'User deleted'});
+  }catch (err) {
+    console.error(err.message) ;
+    res.status(500).send('Server Error');
+  }
+});
 
   module.exports = router;
