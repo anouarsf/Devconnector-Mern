@@ -51,13 +51,6 @@ if(!isMatch)  {
   return  res.status(400).json({ errors: [{ msg: "password is incorrect" }] });
  }
 
-
-
-
-
-
-
-
       const payload = {
         user: {
           id: user.id
