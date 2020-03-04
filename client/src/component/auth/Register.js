@@ -1,7 +1,9 @@
-import React , {Fragment, useState} from 'react'
+import React , {Fragment, useState} from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import {register} from '../../actions/auth';
 
- const Register = () => {
+ const Register = ({register}) => {
    const [formData, setFormData] = useState({
 name: '',
 email: '',
@@ -19,7 +21,7 @@ password2: ''
      if (password !== password2) {
 console.log('Password dont match');
      } else{
-console.log('Succes');
+register( { name , email, password});
 }
 
      
@@ -81,7 +83,8 @@ console.log('Succes');
         Already have an account? <Link to='/login'>Sign In</Link>
       </p>
           </Fragment>
-  )
-}
+  );
+};
 
-export default Register ;
+
+export default connect (null, {register}) (Register) ;
