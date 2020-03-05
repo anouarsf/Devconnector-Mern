@@ -1,6 +1,6 @@
 import axios from 'axios' ;
 
-import {REGISTER_SUCCESS,REGISTER_FAIL, USER_LOADED, AUTH_ERROR , LOGIN_SUCCESS , LOGIN_FAIL } from './types';
+import {REGISTER_SUCCESS,REGISTER_FAIL, USER_LOADED, AUTH_ERROR , LOGIN_SUCCESS , LOGIN_FAIL, LOGOUT } from './types';
 
 import setAuthToken from '../utils/setAuthToken';
 
@@ -19,9 +19,8 @@ export const loadUser = () => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    dispatch({
-      type: AUTH_ERROR
-    });
+
+   
   }
 };
 
@@ -45,7 +44,6 @@ export const register = ({ name, email, password }) => async dispatch => {
 
     dispatch(loadUser());
   } catch (err) {
-    const errors = err.response.data.errors;
 
   
 
@@ -74,12 +72,14 @@ export const login = ( email, password ) => async dispatch => {
 
     dispatch(loadUser());
   } catch (err) {
-    const errors = err.response.data.errors;
-
-  
 
     dispatch({
       type: LOGIN_FAIL
     });
   }
 };
+
+// Logout
+export const logout = () => dispatch => {
+  dispatch ({ type: LOGOUT })
+}
